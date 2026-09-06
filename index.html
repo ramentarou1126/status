@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MONITOR // ステータス監視</title>
+<title>STATUS // ステータス監視</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -292,13 +292,26 @@
   .incident-row span:first-child { color: var(--text); }
   .incident-row.ongoing span:first-child { color: var(--down); }
   .none-text { color: var(--muted); font-size: 12px; }
+
+  .visit-btn {
+    display: inline-block;
+    color: var(--ok);
+    border: 1px solid var(--border-strong);
+    padding: 8px 16px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.15s ease, box-shadow 0.15s ease;
+  }
+  .visit-btn:hover { background: rgba(0, 229, 255, 0.08); box-shadow: 0 0 12px rgba(0, 229, 255, 0.25); }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
     <div>
-      <h1><span class="tick">//</span> MONITOR</h1>
+      <h1><span class="tick">//</span> STATUS</h1>
       <div id="summary-line">読み込み中...</div>
     </div>
     <div class="header-right">
@@ -311,7 +324,7 @@
     <div class="empty-state"><h2>読み込み中</h2></div>
   </div>
 
-  <footer>Cloudflare Workerが30分ごとに自動チェック、GitHub Pagesで表示(1週間分の履歴を保持)</footer>
+  <footer></footer>
 </div>
 
 <div id="overlay">
@@ -322,7 +335,7 @@
   // ============================================================
   // ここだけ自分の環境に合わせて書き換える
   // ============================================================
-  var WORKER_URL = "https://status.hp7vvyvc25.workers.dev";
+  var WORKER_URL = "https://site-monitor.あなたのサブドメイン.workers.dev";
   // ============================================================
 
   var STATUS_URL     = "data/status.json";
@@ -445,7 +458,8 @@
           '<span>' + (mid ? fmtTime(mid.t) : "") + '</span>' +
           '<span>' + (hist.length ? fmtTime(hist[hist.length - 1].t) : "-") + '</span>' +
         '</div></div>' +
-      '<div class="incidents"><h3>障害履歴</h3>' + iHtml + '</div>';
+      '<div class="incidents"><h3>障害履歴</h3>' + iHtml + '</div>' +
+      (site.type === "web" && site.url ? '<div style="margin-top:20px;text-align:right;"><a href="' + site.url + '" target="_blank" rel="noopener noreferrer" class="visit-btn">サイトへ行く →</a></div>' : '');
 
     document.getElementById("modal-body").querySelector(".modal-close")
       .addEventListener("click", closeDetail);
